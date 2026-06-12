@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My AI Learning Roadmap</title>
+<style>
+  :root{
+    --bg:#0f1117; --card:#181b24; --card2:#1f2330; --text:#e8eaf0; --muted:#9aa0b0;
+    --accent:#7c6cf2; --accent2:#4cc9a8; --border:#2a2f3e; --done:#4cc9a8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.55; padding-bottom:80px;}
+  .wrap{max-width:880px; margin:0 auto; padding:0 20px;}
+
+  header{padding:48px 0 24px; text-align:center;}
+  header h1{font-size:2rem; font-weight:700;}
+  header h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;}
+  header p{color:var(--muted); margin-top:8px; max-width:560px; margin-left:auto; margin-right:auto;}
+
+  .meta{display:flex; gap:12px; justify-content:center; margin-top:18px; flex-wrap:wrap;}
+  .pill{background:var(--card); border:1px solid var(--border); border-radius:999px;
+    padding:6px 14px; font-size:.83rem; color:var(--muted);}
+  .pill b{color:var(--text);}
+
+  .progress-card{background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:20px 22px; margin:26px 0;}
+  .progress-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
+  .progress-top h2{font-size:1rem; font-weight:600;}
+  #pct{font-size:1.4rem; font-weight:700; color:var(--accent2);}
+  .bar{height:10px; background:var(--card2); border-radius:6px; overflow:hidden;}
+  .bar-fill{height:100%; width:0%; border-radius:6px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .4s ease;}
+  .progress-sub{color:var(--muted); font-size:.83rem; margin-top:10px;}
+
+  .phase{background:var(--card); border:1px solid var(--border); border-radius:14px;
+    margin-bottom:16px; overflow:hidden;}
+  .phase-head{display:flex; align-items:center; gap:14px; padding:18px 20px; cursor:pointer; user-select:none;}
+  .phase-head:hover{background:var(--card2);}
+  .phase-num{flex-shrink:0; width:40px; height:40px; border-radius:10px; display:flex;
+    align-items:center; justify-content:center; font-weight:700; font-size:1.05rem;
+    background:linear-gradient(135deg,var(--accent),#5a4fd4); color:#fff;}
+  .phase.complete .phase-num{background:linear-gradient(135deg,var(--accent2),#2fa886);}
+  .phase-title{flex-grow:1; min-width:0;}
+  .phase-title h3{font-size:1.05rem; font-weight:650;}
+  .phase-title small{color:var(--muted); font-size:.8rem;}
+  .phase-stats{flex-shrink:0; text-align:right;}
+  .phase-stats .count{font-size:.85rem; color:var(--muted);}
+  .mini-bar{width:90px; height:5px; background:var(--card2); border-radius:3px; margin-top:6px; overflow:hidden;}
+  .mini-fill{height:100%; background:var(--accent2); border-radius:3px; transition:width .3s;}
+  .chev{flex-shrink:0; color:var(--muted); transition:transform .25s; font-size:.8rem;}
+  .phase.open .chev{transform:rotate(90deg);}
+  .phase-body{display:none; border-top:1px solid var(--border); padding:8px 20px 16px;}
+  .phase.open .phase-body{display:block;}
+  .phase-why{color:var(--muted); font-size:.88rem; padding:12px 2px 8px; font-style:italic;}
+
+  .item{display:flex; gap:13px; padding:13px 2px; border-bottom:1px solid var(--border); align-items:flex-start;}
+  .item:last-child{border-bottom:none;}
+  .cb{flex-shrink:0; width:22px; height:22px; border-radius:7px; border:2px solid var(--muted);
+    background:transparent; cursor:pointer; margin-top:2px; position:relative; transition:all .15s;}
+  .cb:hover{border-color:var(--accent2);}
+  .item.done .cb{background:var(--done); border-color:var(--done);}
+  .item.done .cb::after{content:"✓"; position:absolute; inset:0; display:flex; align-items:center;
+    justify-content:center; color:#0f1117; font-size:.85rem; font-weight:800;}
+  .item-main{flex-grow:1; min-width:0;}
+  .item-title{font-weight:560; font-size:.95rem;}
+  .item.done .item-title{color:var(--muted); text-decoration:line-through;}
+  .item-desc{color:var(--muted); font-size:.85rem; margin-top:2px;}
+  .item-links{margin-top:5px; display:flex; gap:10px; flex-wrap:wrap;}
+  .item-links a{color:var(--accent); font-size:.82rem; text-decoration:none; border-bottom:1px dotted var(--accent);}
+  .item-links a:hover{color:var(--accent2); border-color:var(--accent2);}
+  .hours{flex-shrink:0; font-size:.75rem; color:var(--muted); background:var(--card2);
+    border-radius:6px; padding:3px 8px; margin-top:3px; white-space:nowrap;}
+  .project{border-left:3px solid var(--accent2); padding-left:12px; margin:10px 0; background:rgba(76,201,168,.06); border-radius:0 8px 8px 0;}
+  .project .item{border-bottom:none;}
+  .tag-project{display:inline-block; font-size:.68rem; font-weight:700; letter-spacing:.05em;
+    color:var(--accent2); text-transform:uppercase; margin-bottom:2px;}
+
+  footer{margin-top:34px; text-align:center; color:var(--muted); font-size:.83rem;}
+  .reset{margin-top:14px; background:none; border:1px solid var(--border); color:var(--muted);
+    border-radius:8px; padding:7px 16px; cursor:pointer; font-size:.82rem;}
+  .reset:hover{border-color:#c0596a; color:#e07a8b;}
+
+  @media(max-width:600px){
+    .phase-stats{display:none;}
+    header h1{font-size:1.5rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>My <span>AI Learning</span> Roadmap</h1>
+    <p>From programmer to AI app &amp; agent builder — a 12-month path at ~5 hours/week. Check items off as you go; progress saves automatically in your browser.</p>
+    <div class="meta">
+      <span class="pill">Goal: <b>Build AI apps &amp; agents</b></span>
+      <span class="pill">Pace: <b>~5 h/week</b></span>
+      <span class="pill">Total: <b>~220 hours</b></span>
+    </div>
+  </header>
+
+  <div class="progress-card">
+    <div class="progress-top"><h2>Overall progress</h2><span id="pct">0%</span></div>
+    <div class="bar"><div class="bar-fill" id="bar"></div></div>
+    <div class="progress-sub" id="sub">0 of 0 items completed</div>
+  </div>
+
+  <div id="phases"></div>
+
+  <footer>
+    Built for AMAR AI · Tip: aim for one checkbox per week and don't skip the projects — they're where the learning sticks.
+    <br><button class="reset" onclick="resetAll()">Reset all progress</button>
+  </footer>
+</div>
+
+<script>
+const ROADMAP = [
+  {
+    title:"Foundations — How modern AI actually works",
+    weeks:"Months 1–2 · ~35h",
+    why:"You can build on APIs without a PhD, but a solid mental model of what's happening inside an LLM makes everything downstream easier.",
+    items:[
+      {t:"Neural networks, visually", d:"Watch 3Blue1Brown's neural network series for intuition on how networks learn.", h:"4h",
+       links:[["3Blue1Brown series","https://www.3blue1brown.com/topics/neural-networks"]]},
+      {t:"Intro to Large Language Models", d:"Andrej Karpathy's 1-hour talk — the single best LLM overview. Then watch his 'Deep dive into LLMs' follow-up.", h:"5h",
+       links:[["Intro to LLMs (YouTube)","https://www.youtube.com/watch?v=zjkBMFhNj_g"],["Deep dive into LLMs","https://www.youtube.com/watch?v=7xTGNNLPyMI"]]},
+      {t:"How tokens, context windows & sampling work", d:"Read about tokenization, temperature, and context limits — concepts you'll use daily.", h:"3h",
+       links:[["What is ChatGPT doing? (Wolfram)","https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/"]]},
+      {t:"Python tune-up for AI work", d:"Get comfortable with venvs, pip, async basics, and HTTP requests — the plumbing of every AI app.", h:"8h",
+       links:[["Real Python: virtual envs","https://realpython.com/python-virtual-environments-a-primer/"],["Requests quickstart","https://requests.readthedocs.io/en/latest/user/quickstart/"]]},
+      {t:"Prompt engineering fundamentals", d:"Learn system prompts, few-shot examples, chain-of-thought, and XML structuring.", h:"6h",
+       links:[["Anthropic prompting docs","https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview"],["Prompting guide","https://www.promptingguide.ai/"]]},
+      {t:"Play before you build", d:"Spend deliberate hours testing limits of Claude/ChatGPT: reasoning, refusals, hallucinations, long context.", h:"5h", links:[]},
+      {p:1, t:"Project: Prompt portfolio", d:"Write 10 reusable prompts (summarizer, code reviewer, email drafter...) and document what made each work.", h:"4h", links:[]}
+    ]
+  },
+  {
+    title:"Building with LLM APIs",
+    weeks:"Months 3–4 · ~35h",
+    why:"This is where you go from user to builder: calling models from code, handling structured output, and shipping your first real tool.",
+    items:[
+      {t:"First API calls", d:"Get an API key, make your first calls, understand messages, roles, and pricing.", h:"4h",
+       links:[["Claude API quickstart","https://docs.claude.com/en/docs/get-started"],["OpenAI quickstart","https://platform.openai.com/docs/quickstart"]]},
+      {t:"Structured outputs (JSON mode)", d:"Force models to return valid JSON your code can parse — the backbone of reliable AI features.", h:"4h",
+       links:[["Structured outputs guide","https://platform.openai.com/docs/guides/structured-outputs"]]},
+      {t:"Tool use / function calling", d:"Let the model call your functions: weather lookups, DB queries, calculators.", h:"6h",
+       links:[["Anthropic tool use","https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview"]]},
+      {t:"Streaming, retries & error handling", d:"Stream tokens for snappy UX; handle rate limits and timeouts gracefully.", h:"4h",
+       links:[["Streaming docs","https://docs.claude.com/en/docs/build-with-claude/streaming"]]},
+      {t:"Vision & multimodal inputs", d:"Send images to models — receipts, screenshots, charts.", h:"3h",
+       links:[["Vision docs","https://docs.claude.com/en/docs/build-with-claude/vision"]]},
+      {p:1, t:"Project: CLI assistant", d:"Build a command-line tool that does something useful for YOU — e.g., summarizes a folder of notes, drafts replies, or explains error logs. Use tool calling.", h:"14h", links:[]}
+    ]
+  },
+  {
+    title:"RAG — Chat with your own data",
+    weeks:"Months 5–6 · ~35h",
+    why:"Retrieval-Augmented Generation is the most-deployed LLM pattern in industry: grounding models in your documents to cut hallucination.",
+    items:[
+      {t:"Embeddings explained", d:"Understand vectors, cosine similarity, and semantic search.", h:"4h",
+       links:[["OpenAI embeddings guide","https://platform.openai.com/docs/guides/embeddings"]]},
+      {t:"Vector databases", d:"Hands-on with Chroma (local, free) — store, query, filter.", h:"5h",
+       links:[["Chroma getting started","https://docs.trychroma.com/getting-started"]]},
+      {t:"Chunking strategies", d:"How you split documents matters more than which DB you pick. Learn size/overlap trade-offs.", h:"4h",
+       links:[["Chunking strategies (Pinecone)","https://www.pinecone.io/learn/chunking-strategies/"]]},
+      {t:"RAG pipeline end-to-end", d:"Load → chunk → embed → retrieve → generate, with citations.", h:"6h",
+       links:[["RAG from scratch (LangChain)","https://github.com/langchain-ai/rag-from-scratch"]]},
+      {p:1, t:"Project: Chat with your docs", d:"Build an app that answers questions over your own PDFs or notes, with sources cited. This is THE portfolio piece employers and clients recognize.", h:"16h", links:[]}
+    ]
+  },
+  {
+    title:"Agents — Models that take action",
+    weeks:"Months 7–8 · ~35h",
+    why:"Agents = LLMs in a loop with tools and memory. This is the frontier of what's being built right now, and your stated goal.",
+    items:[
+      {t:"Agent fundamentals", d:"Read Anthropic's 'Building effective agents' — workflows vs agents, when each wins.", h:"3h",
+       links:[["Building effective agents","https://www.anthropic.com/research/building-effective-agents"]]},
+      {t:"The agent loop", d:"Implement a bare agent yourself: model → tool call → result → model, in a while-loop. No framework.", h:"6h",
+       links:[["Tool use docs","https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview"]]},
+      {t:"Model Context Protocol (MCP)", d:"The emerging standard for connecting AI to tools and data. Build a tiny MCP server.", h:"6h",
+       links:[["MCP docs","https://modelcontextprotocol.io/"]]},
+      {t:"Agent frameworks tour", d:"Try LangGraph or the Claude Agent SDK; compare with your hand-rolled loop.", h:"6h",
+       links:[["LangGraph quickstart","https://langchain-ai.github.io/langgraph/tutorials/introduction/"],["Claude Agent SDK","https://docs.claude.com/en/api/agent-sdk/overview"]]},
+      {p:1, t:"Project: A real agent", d:"Build an agent that completes a multi-step task: e.g., researches a topic across sources and writes a brief, or triages and labels files. Give it 2–3 tools and a loop.", h:"14h", links:[]}
+    ]
+  },
+  {
+    title:"Production — Make it reliable",
+    weeks:"Months 9–10 · ~35h",
+    why:"The gap between demo and product is evals, observability, and cost control. This is what separates hobbyists from professionals.",
+    items:[
+      {t:"Evals 101", d:"Write automated tests for LLM outputs: golden answers, LLM-as-judge, regression suites.", h:"6h",
+       links:[["Your AI product needs evals","https://hamel.dev/blog/posts/evals/"]]},
+      {t:"Observability & tracing", d:"Log every prompt/response; trace multi-step agent runs to debug them.", h:"4h",
+       links:[["LangSmith docs","https://docs.smith.langchain.com/"]]},
+      {t:"Cost & latency engineering", d:"Prompt caching, model routing (cheap model first), batching.", h:"4h",
+       links:[["Prompt caching","https://docs.claude.com/en/docs/build-with-claude/prompt-caching"]]},
+      {t:"Safety & guardrails", d:"Prompt injection, jailbreaks, PII handling — know the attack surface of your own apps.", h:"4h",
+       links:[["OWASP LLM Top 10","https://owasp.org/www-project-top-10-for-large-language-model-applications/"]]},
+      {t:"Deploy a backend", d:"Wrap your agent in FastAPI and deploy it somewhere free (Render/Railway/Fly).", h:"6h",
+       links:[["FastAPI tutorial","https://fastapi.tiangolo.com/tutorial/"]]},
+      {p:1, t:"Project: Harden one app", d:"Take your RAG app or agent, add evals, tracing, caching and deploy it live with a public URL.", h:"11h", links:[]}
+    ]
+  },
+  {
+    title:"Capstone — Ship something real",
+    weeks:"Months 11–12 · ~45h",
+    why:"One substantial, public, finished project teaches more than ten tutorials — and becomes your proof of skill.",
+    items:[
+      {t:"Pick a real problem", d:"Choose something you or someone you know actually needs. Write a 1-page spec: users, features, tools, models.", h:"3h", links:[]},
+      {p:1, t:"Project: Build the capstone", d:"An AI app or agent with a UI, deployed, used by at least one real person who isn't you. Iterate weekly.", h:"30h", links:[]},
+      {t:"Write it up", d:"Publish a post: what you built, architecture, what failed, evals, costs. Post on GitHub + LinkedIn/X.", h:"4h", links:[]},
+      {t:"Plan what's next", d:"Fine-tuning? Voice? Computer use? Local models? Pick your next 6 months from what excited you most.", h:"3h",
+       links:[["Hugging Face courses","https://huggingface.co/learn"]]},
+      {t:"Stay current (ongoing habit)", d:"Subscribe to 1–2 sources max; skim weekly, not daily.", h:"1h/wk",
+       links:[["Latent Space","https://www.latent.space/"],["Simon Willison's blog","https://simonwillison.net/"]]}
+    ]
+  }
+];
+
+const KEY = "ai-roadmap-progress-v1";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e) { state = {}; }
+let openState = {};
+try { openState = JSON.parse(localStorage.getItem(KEY+"-open")) || {0:true}; } catch(e) { openState = {0:true}; }
+
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); localStorage.setItem(KEY+"-open", JSON.stringify(openState)); }catch(e){} }
+
+function render(){
+  const root = document.getElementById("phases");
+  root.innerHTML = "";
+  let total=0, done=0;
+  ROADMAP.forEach((ph,pi)=>{
+    let pTotal=ph.items.length, pDone=0;
+    ph.items.forEach((it,ii)=>{ if(state[pi+"-"+ii]) pDone++; });
+    total+=pTotal; done+=pDone;
+
+    const phase=document.createElement("div");
+    phase.className="phase"+(openState[pi]?" open":"")+(pDone===pTotal?" complete":"");
+
+    const head=document.createElement("div");
+    head.className="phase-head";
+    head.innerHTML =
+      '<div class="phase-num">'+(pDone===pTotal?"✓":(pi+1))+'</div>'+
+      '<div class="phase-title"><h3>'+ph.title+'</h3><small>'+ph.weeks+'</small></div>'+
+      '<div class="phase-stats"><div class="count">'+pDone+' / '+pTotal+'</div>'+
+      '<div class="mini-bar"><div class="mini-fill" style="width:'+(pTotal?100*pDone/pTotal:0)+'%"></div></div></div>'+
+      '<div class="chev">▶</div>';
+    head.onclick=()=>{ openState[pi]=!openState[pi]; save(); render(); };
+    phase.appendChild(head);
+
+    const body=document.createElement("div");
+    body.className="phase-body";
+    body.innerHTML='<div class="phase-why">'+ph.why+'</div>';
+
+    ph.items.forEach((it,ii)=>{
+      const id=pi+"-"+ii;
+      const item=document.createElement("div");
+      item.className="item"+(state[id]?" done":"");
+      const links=(it.links||[]).map(l=>'<a href="'+l[1]+'" target="_blank" rel="noopener">'+l[0]+' ↗</a>').join("");
+      item.innerHTML =
+        '<div class="cb" role="checkbox" aria-checked="'+(!!state[id])+'" tabindex="0"></div>'+
+        '<div class="item-main">'+(it.p?'<span class="tag-project">Project</span><br>':'')+
+        '<span class="item-title">'+it.t+'</span>'+
+        '<div class="item-desc">'+it.d+'</div>'+
+        (links?'<div class="item-links">'+links+'</div>':'')+'</div>'+
+        '<span class="hours">'+it.h+'</span>';
+      const cb=item.querySelector(".cb");
+      const toggle=()=>{ state[id]=!state[id]; if(!state[id]) delete state[id]; save(); render(); };
+      cb.onclick=toggle;
+      cb.onkeydown=e=>{ if(e.key===" "||e.key==="Enter"){e.preventDefault(); toggle();} };
+      if(it.p){ const wrapP=document.createElement("div"); wrapP.className="project"; wrapP.appendChild(item); body.appendChild(wrapP); }
+      else body.appendChild(item);
+    });
+    phase.appendChild(body);
+    root.appendChild(phase);
+  });
+
+  const pct = total? Math.round(100*done/total) : 0;
+  document.getElementById("pct").textContent = pct+"%";
+  document.getElementById("bar").style.width = pct+"%";
+  document.getElementById("sub").textContent = done+" of "+total+" items completed"+(pct===100?" — roadmap complete! 🎉":"");
+}
+
+function resetAll(){
+  if(confirm("Clear all progress? This can't be undone.")){ state={}; save(); render(); }
+}
+
+render();
+</script>
+</body>
+</html>
